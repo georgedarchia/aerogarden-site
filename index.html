@@ -1,0 +1,79 @@
+﻿<!DOCTYPE html>
+<html lang="ka">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aerogarden - შეფების პორტალი</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="navbar">
+        <div class="logo-container">
+            <a href="#"><img src="images/logo.png" alt="Aerogarden Logo" class="logo"></a>
+        </div>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="#products" class="nav-btn">პროდუქტები</a></li>
+                <li><a href="#chef-orders-section" id="chef-nav-link" class="nav-btn" style="display:none;">ჩემი შეკვეთები</a></li>
+                <li><a href="#admin-section" id="admin-nav-link" class="nav-btn" style="display:none;">შეკვეთების მართვა</a></li>
+                <li><button id="auth-modal-btn" class="nav-btn highlight-btn">შესვლა / რეგისტრაცია</button></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <h1>მიკრომწვანილი და ბოსტნეული</h1>
+        <p id="user-welcome">სპეციალური პორტალი შეფ-მზარეულებისა და რესტორნებისთვის.</p>
+    </section>
+
+    <section id="products" class="products-section">
+        <h2>პროდუქტები და შეკვეთა</h2>
+        <div class="products-grid" id="products-grid"></div>
+        
+        <div id="order-action-box" class="order-action-container" style="display:none;">
+            <div class="delivery-date-picker">
+                <label for="delivery-date">📅 ჩაბარების თარიღი:</label>
+                <input type="date" id="delivery-date" class="date-input">
+            </div>
+            <button id="submit-order-btn" class="nav-btn active-btn">შეკვეთის გაგზავნა (<span id="cart-total">0</span> ₾)</button>
+        </div>
+    </section>
+
+    <section id="chef-orders-section" class="admin-section" style="display:none;">
+        <h2>ჩემი შეკვეთები</h2>
+        <div id="chef-orders-list" class="orders-list"></div>
+    </section>
+
+    <section id="admin-section" class="admin-section" style="display:none;">
+        <h2>შემოსული შეკვეთები (ადმინ-პანელი)</h2>
+        <div id="orders-list" class="orders-list"></div>
+    </section>
+
+    <div id="auth-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <div class="tab-header">
+                <button id="tab-login-btn" class="tab-btn active">შესვლა</button>
+                <button id="tab-register-btn" class="tab-btn">რეგისტრაცია (შეფი)</button>
+            </div>
+
+            <form id="login-form" class="auth-form">
+                <input type="email" id="login-email" placeholder="ელ-ფოსტა" required>
+                <input type="password" id="login-password" placeholder="პაროლი" required>
+                <button type="submit" class="submit-btn">შესვლა</button>
+            </form>
+
+            <form id="register-form" class="auth-form" style="display:none;">
+                <input type="text" id="reg-name" placeholder="სახელი, გვარი" required>
+                <input type="text" id="reg-restaurant" placeholder="რესტორნის / ობიექტის დასახელება" required>
+                <input type="tel" id="reg-phone" placeholder="ტელეფონის ნომერი" required>
+                <input type="email" id="reg-email" placeholder="ელ-ფოსტა" required>
+                <input type="password" id="reg-password" placeholder="პაროლი" required>
+                <button type="submit" class="submit-btn">რეგისტრაცია</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
