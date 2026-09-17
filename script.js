@@ -3,25 +3,25 @@ const SUPABASE_KEY = 'sb_publishable_7HEmwuaJYPhA7jltChVqcQ_1r4AAhYr';
 const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 const products = [
-    { latin: "PEA", geo: "ბარდა", price: 9 },
-    { latin: "SUNFLOWER", geo: "მზესუმზირა", price: 9 },
-    { latin: "RED BASIL", geo: "წითელი ბაზილიკი", price: 12 },
-    { latin: "GREEN BASIL", geo: "მწვანე ბაზილიკი", price: 12 },
-    { latin: "RED AMARANTH", geo: "წითელი ამარანტი", price: 10 },
-    { latin: "RED MIZUNA", geo: "წითელი მიზუნა", price: 9 },
-    { latin: "GREEN MIZUNA", geo: "მწვანე მიზუნა", price: 9 },
-    { latin: "RED MUSTARD", geo: "წითელი მდოგვი", price: 10 },
-    { latin: "ONION", geo: "ხახვი", price: 10 },
-    { latin: "SWISSCHARD BRIGHT LIGHT", geo: "ჭარხალი Bright Light", price: 10 },
-    { latin: "BEET BULLS BLOOD", geo: "ჭარხალი Bulls Blood", price: 10 },
-    { latin: "RED KOHLRABI", geo: "წითელი კოლრაბი", price: 8 },
-    { latin: "GARDEN CRESS", geo: "წიწმატი (კრესი სალათი)", price: 9 },
-    { latin: "RADISH CHINA ROSE", geo: "ბოლოკი China Rose", price: 9 },
-    { latin: "RADISH RED CORAL", geo: "ბოლოკი Red Coral", price: 9 },
-    { latin: "RADISH SANGO", geo: "ბოლოკი Sango (მეწამული ბოლოკი)", price: 10 },
-    { latin: "ROCKET", geo: "რუკოლა", price: 8 },
-    { latin: "ROCKET RUNWAY", geo: "რუკოლა Runway", price: 8 },
-    { latin: "TATSOI", geo: "ტატსოი", price: 9 }
+    { latin: "PEA", geo: "ბარდა", price: 9, icon: "🫛", sub: "ბარდა · მწვანილი" },
+    { latin: "SUNFLOWER", geo: "მზესუმზირა", price: 9, icon: "🌻", sub: "მზესუმზირა · მწვანილი" },
+    { latin: "RED BASIL", geo: "წითელი ბაზილიკი", price: 12, icon: "🌿", sub: "წითელი ბაზილიკი · მწვანილი" },
+    { latin: "GREEN BASIL", geo: "მწვანე ბაზილიკი", price: 12, icon: "🌱", sub: "მწვანე ბაზილიკი · მწვანილი" },
+    { latin: "RED AMARANTH", geo: "წითელი ამარანტი", price: 10, icon: "🌿", sub: "წითელი ამარანტი · მწვანილი" },
+    { latin: "RED MIZUNA", geo: "წითელი მიზუნა", price: 9, icon: "🌱", sub: "წითელი მიზუნა · მწვანილი" },
+    { latin: "GREEN MIZUNA", geo: "მწვანე მიზუნა", price: 9, icon: "🌱", sub: "მწვანე მიზუნა · მწვანილი" },
+    { latin: "RED MUSTARD", geo: "წითელი მდოგვი", price: 10, icon: "🌿", sub: "წითელი მდოგვი · მწვანილი" },
+    { latin: "ONION", geo: "ხახვი", price: 10, icon: "🧅", sub: "ხახვი · მწვანილი" },
+    { latin: "SWISSCHARD BRIGHT LIGHT", geo: "ჭარხალი Bright Light", price: 10, icon: "🌿", sub: "ჭარხალი · მწვანილი" },
+    { latin: "BEET BULLS BLOOD", geo: "ჭარხალი Bulls Blood", price: 10, icon: "🌿", sub: "ჭარხალი · მწვანილი" },
+    { latin: "RED KOHLRABI", geo: "წითელი კოლრაბი", price: 8, icon: "🌱", sub: "კოლრაბი · მწვანილი" },
+    { latin: "GARDEN CRESS", geo: "წიწმატი (კრესი სალათი)", price: 9, icon: "🌱", sub: "წიწმატი · მწვანილი" },
+    { latin: "RADISH CHINA ROSE", geo: "ბოლოკი China Rose", price: 9, icon: "🌱", sub: "ბოლოკი · მწვანილი" },
+    { latin: "RADISH RED CORAL", geo: "ბოლოკი Red Coral", price: 9, icon: "🌱", sub: "ბოლოკი · მწვანილი" },
+    { latin: "RADISH SANGO", geo: "ბოლოკი Sango", price: 10, icon: "🌿", sub: "ბოლოკი · მეწამული" },
+    { latin: "ROCKET", geo: "რუკოლა", price: 8, icon: "🌱", sub: "რუკოლა · მწვანილი" },
+    { latin: "ROCKET RUNWAY", geo: "რუკოლა Runway", price: 8, icon: "🌱", sub: "რუკოლა · მწვანილი" },
+    { latin: "TATSOI", geo: "ტატსოი", price: 9, icon: "🌱", sub: "ტატსოი · მწვანილი" }
 ];
 
 let currentUser = null;
@@ -32,37 +32,53 @@ try {
 
 let cart = {};
 
+window.changeQty = function(idx, delta) {
+    const currentQty = cart[idx] || 0;
+    const newQty = currentQty + delta;
+    if (newQty > 0) {
+        cart[idx] = newQty;
+    } else {
+        delete cart[idx];
+    }
+    renderProducts();
+    updateCartTotal();
+};
+
 function renderProducts() {
     const grid = document.getElementById('products-grid');
     if (!grid) return;
     let html = '';
     products.forEach((p, idx) => {
-        let inputHtml = '';
+        const qty = cart[idx] || 0;
+        let actionHtml = '';
+
         if (currentUser && currentUser.role === 'chef') {
-            const qty = cart[idx] || 0;
-            inputHtml = '<input type="number" min="0" value="' + qty + '" class="qty-input" data-idx="' + idx + '" placeholder="0">';
+            if (qty === 0) {
+                actionHtml = '<button class="add-btn" onclick="changeQty(' + idx + ', 1)">დამატება</button>';
+            } else {
+                actionHtml = '<div class="qty-control-box">' +
+                    '<button class="qty-btn" onclick="changeQty(' + idx + ', -1)">-</button>' +
+                    '<span class="qty-num">' + qty + '</span>' +
+                    '<button class="qty-btn" onclick="changeQty(' + idx + ', 1)">+</button>' +
+                    '</div>';
+            }
         }
+
         html += '<div class="product-card">' +
-            '<div class="product-info">' +
-            '<span class="product-latin">' + p.latin + '</span>' +
-            '<span class="product-geo">' + p.geo + '</span>' +
+            '<div class="product-left">' +
+            '<div class="product-icon-box">' + p.icon + '</div>' +
+            '<div class="product-text-info">' +
+            '<span class="product-latin-name">' + p.latin + '</span>' +
+            '<span class="product-sub-text">' + p.sub + '</span>' +
             '</div>' +
-            '<div class="product-action">' +
-            '<span class="product-price">' + p.price + ' ₾</span>' +
-            inputHtml +
-            '</div></div>';
+            '</div>' +
+            '<div class="product-right">' +
+            '<span class="product-price-tag">' + p.price + ' ₾</span>' +
+            actionHtml +
+            '</div>' +
+            '</div>';
     });
     grid.innerHTML = html;
-
-    document.querySelectorAll('.qty-input').forEach(input => {
-        input.addEventListener('input', (e) => {
-            const idx = e.target.getAttribute('data-idx');
-            const val = parseInt(e.target.value) || 0;
-            if (val > 0) cart[idx] = val;
-            else delete cart[idx];
-            updateCartTotal();
-        });
-    });
 }
 
 function updateCartTotal() {
@@ -341,7 +357,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const { data, error } = await _supabase.from('users').insert([newUser]).select();
             if (error) {
-                alert('რეგისტრაციის შეცდომა: ' + error.message);
+                if (error.code === '23505') {
+                    alert('ეს ელ-ფოსტა უკვე დარეგისტრირებულია! გთხოვთ, გაიაროთ ავტორიზაცია.');
+                } else {
+                    alert('რეგისტრაციის შეცდომა: ' + error.message);
+                }
                 return;
             }
 

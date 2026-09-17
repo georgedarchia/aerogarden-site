@@ -478,3 +478,134 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     transform: translateY(-1px);
     box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
 }
+
+/* ==========================================
+   🌱 პროდუქტის ბარათების ახალი დიზაინი
+========================================== */
+
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 16px;
+    margin-top: 20px;
+}
+
+.product-card {
+    background: #112a1b;
+    border: 1px solid #1d432b;
+    border-radius: 14px;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    transition: transform 0.2s, border-color 0.2s;
+}
+
+.product-card:hover {
+    border-color: #3b8a4f;
+    transform: translateY(-2px);
+}
+
+.product-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.product-icon-box {
+    width: 46px;
+    height: 46px;
+    background: #193b26;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+}
+
+.product-text-info {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.product-latin-name {
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 15px;
+    letter-spacing: 0.5px;
+}
+
+.product-sub-text {
+    color: #8bb397;
+    font-size: 13px;
+}
+
+.product-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.product-price-tag {
+    color: #69bf4a;
+    font-weight: 700;
+    font-size: 17px;
+    white-space: nowrap;
+}
+
+/* მწვანე "დამატება" ღილაკი */
+.add-btn {
+    background-color: #52c234;
+    color: #07150c;
+    border: none;
+    padding: 9px 16px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+    white-space: nowrap;
+}
+
+.add-btn:hover {
+    background-color: #61d341;
+    transform: scale(1.03);
+}
+
+/* რაოდენობის მართვის ბლოკი (+ / -) */
+.qty-control-box {
+    display: flex;
+    align-items: center;
+    background: #09190f;
+    border: 1px solid #285a38;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.qty-btn {
+    background: #193b26;
+    color: #ffffff;
+    border: none;
+    width: 30px;
+    height: 34px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.qty-btn:hover {
+    background: #27593b;
+}
+
+.qty-num {
+    padding: 0 10px;
+    color: #69bf4a;
+    font-weight: bold;
+    font-size: 14px;
+    min-width: 20px;
+    text-align: center;
+}
