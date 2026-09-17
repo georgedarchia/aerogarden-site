@@ -332,3 +332,149 @@ header, .header, nav, .navbar {
         flex-direction: row;
     }
 }
+
+/* ==========================================
+   🎨 პროფილისა და შეკვეთის ინპუტების დიზაინი
+========================================== */
+
+/* ბლოკების ფონი და კანტები */
+#profile-section, #order-action-box {
+    background: rgba(13, 33, 20, 0.85);
+    border: 1px solid rgba(105, 191, 74, 0.25);
+    border-radius: 12px;
+    padding: 22px;
+    margin-bottom: 25px;
+    backdrop-filter: blur(6px);
+}
+
+/* პროფილის ბადე (Grid) */
+.profile-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+    margin-top: 15px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.form-group.full-width {
+    grid-column: 1 / -1;
+}
+
+.form-group label {
+    font-size: 13px;
+    color: #a8d5ba;
+    font-weight: 500;
+}
+
+/* ინპუტების მწვანე დიზაინი (თეთრის ნაცვლად) */
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="date"],
+input[type="password"],
+input[type="number"] {
+    background-color: #07150c !important;
+    color: #e2f5e8 !important;
+    border: 1px solid #234d2f !important;
+    border-radius: 8px !important;
+    padding: 10px 14px !important;
+    font-size: 14px !important;
+    outline: none !important;
+    transition: all 0.25s ease !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+/* ინპუტზე დაჭერისას (Focus) */
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="tel"]:focus,
+input[type="date"]:focus,
+input[type="password"]:focus,
+input[type="number"]:focus {
+    border-color: #69bf4a !important;
+    box-shadow: 0 0 10px rgba(105, 191, 74, 0.35) !important;
+    background-color: #0d2616 !important;
+}
+
+/* გათიშული (disabled) ელ-ფოსტის ინპუტი */
+input:disabled, input[readonly] {
+    background-color: #040c07 !important;
+    border-color: #142a1b !important;
+    color: #61876a !important;
+    cursor: not-allowed;
+}
+
+/* თარიღის არჩევის ხატულას შეფერილი მწვანედ */
+input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(0.8) sepia(100%) saturate(300%) hue-rotate(70deg);
+    cursor: pointer;
+}
+
+/* შეკვეთის გაფორმების ზოლი */
+.order-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 18px;
+}
+
+.order-inputs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    flex: 1;
+}
+
+.order-inputs > div {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex: 1;
+    min-width: 200px;
+}
+
+.order-inputs label {
+    font-size: 13px;
+    color: #a8d5ba;
+}
+
+.cart-summary {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.cart-summary span {
+    font-size: 16px;
+    color: #a8d5ba;
+}
+
+.cart-summary strong {
+    color: #69bf4a;
+    font-size: 22px;
+}
+
+/* ღილაკების გაუმჯობესება */
+.submit-btn, .checkout-btn {
+    background: linear-gradient(135deg, #4caf50, #2e7d32);
+    color: #ffffff;
+    border: none;
+    padding: 11px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.submit-btn:hover, .checkout-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
+}
