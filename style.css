@@ -609,3 +609,49 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     min-width: 20px;
     text-align: center;
 }
+
+/* ==========================================
+   🖼️ გალერეის სტილები
+========================================== */
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+    margin-top: 15px;
+}
+
+.gallery-card {
+    background: #112a1b;
+    border: 1px solid #1d432b;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.25s ease, border-color 0.25s ease;
+}
+
+.gallery-card:hover {
+    transform: translateY(-4px);
+    border-color: #69bf4a;
+}
+
+.gallery-img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    display: block;
+}
+
+.gallery-info {
+    padding: 14px 16px;
+}
+
+.gallery-title {
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 16px;
+    margin-bottom: 4px;
+}
+
+.gallery-desc {
+    color: #8bb397;
+    font-size: 13px;
+}
