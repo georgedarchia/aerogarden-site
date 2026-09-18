@@ -1,0 +1,39 @@
+﻿<!DOCTYPE html>
+<html lang="ka">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>პირადი პროფილი | Aerogarden</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body { background: #040e08; color: #fff; font-family: system-ui, -apple-system, sans-serif; margin: 0; padding: 20px; }
+        .profile-container { max-width: 550px; margin: 40px auto; background: #0d2618; border: 1px solid #1b4d31; padding: 30px; border-radius: 12px; }
+        .nav-back { display: inline-block; margin-bottom: 20px; color: #4caf50; text-decoration: none; font-weight: bold; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 6px; color: #a2dbb3; font-size: 14px; }
+        input { width: 100%; padding: 11px; background: #040e08; border: 1px solid #1b4d31; color: #fff; border-radius: 8px; box-sizing: border-box; font-size: 14px; outline: none; }
+        button { background: #388e3c; color: white; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 15px; font-size: 15px; }
+    </style>
+</head>
+<body>
+    <div class="profile-container">
+        <a href="index.html" class="nav-back">← მთავარ გვერდზე დაბრუნება</a>
+        <h2>👤 პირადი პროფილი</h2>
+        <form id="profileForm">
+            <div class="form-group">
+                <label>სახელი და გვარი:</label>
+                <input type="text" id="profName" value="გიორგი დარჩია">
+            </div>
+            <div class="form-group">
+                <label>კომპანია / ობიექტი:</label>
+                <input type="text" id="profCompany" value="აეროგარდენი">
+            </div>
+            <div class="form-group">
+                <label>ქალაქი / მისამართი:</label>
+                <input type="text" id="profCity" value="ოზურგეთი">
+            </div>
+            <button type="button" onclick="alert('მონაცემები შენახულია!')">მონაცემების შენახვა</button>
+        </form>
+    </div>
+</body>
+</html>
