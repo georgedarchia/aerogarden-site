@@ -1003,3 +1003,6 @@ div:has(#order-date) {
 }
 
 .welcome-banner, #welcome-banner, .greeting-box, [id*='welcome'], [class*='welcome-banner'] { display: none !important; height: 0 !important; margin: 0 !important; padding: 0 !important; }
+
+
+body > header + div:empty { display: none !important; height: 0 !important; margin: 0 !important; padding: 0 !important; }
