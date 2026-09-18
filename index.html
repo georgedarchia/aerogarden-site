@@ -166,11 +166,42 @@
 
 
 
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    function initSubscriptionAndCardFeatures() {
+    function updateAppLayout() {
         // -------------------------------------------------------------
-        // 1. პერიოდული გამოწერის განახლებული ბლოკი
+        // 1. "პირადი პროფილი" ღილაკის გადატანა "გამოსვლა"-ს გვერდით
+        // -------------------------------------------------------------
+        var allNavElements = document.querySelectorAll('button, a, div, span');
+        var profileEl = null;
+        var logoutEl = null;
+
+        allNavElements.forEach(function(el) {
+            var txt = el.textContent.trim();
+            if (txt.includes('პირადი პროფილი') && el.children.length === 0) {
+                profileEl = el.closest('button') || el.closest('a') || el;
+            }
+            if (txt.includes('გამოსვლა') && el.children.length === 0) {
+                logoutEl = el.closest('button') || el.closest('a') || el;
+            }
+        });
+
+        if (profileEl && logoutEl && profileEl.nextElementSibling !== logoutEl) {
+            var logoutParent = logoutEl.parentElement;
+            if (logoutParent) {
+                logoutParent.style.display = 'flex';
+                logoutParent.style.alignItems = 'center';
+                logoutParent.style.gap = '10px';
+                logoutParent.style.justifyContent = 'flex-end';
+                
+                profileEl.style.margin = '0';
+                logoutParent.insertBefore(profileEl, logoutEl);
+            }
+        }
+
+        // -------------------------------------------------------------
+        // 2. პერიოდული გამოწერის ბლოკი
         // -------------------------------------------------------------
         var dateInput = document.getElementById('order-date') || document.querySelector('input[type="date"]');
         if (dateInput && !document.getElementById('recurring-subscription-box')) {
@@ -220,7 +251,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         // -------------------------------------------------------------
-        // 2. Tray vs Cut სელექტორი ბარათზე
+        // 3. Tray vs Cut სელექტორი ბარათის ზედა მარჯვენა კუთხეში
         // -------------------------------------------------------------
         var buttons = document.querySelectorAll('button');
         buttons.forEach(function(btn) {
@@ -250,7 +281,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    setInterval(initSubscriptionAndCardFeatures, 500);
+    setInterval(updateAppLayout, 500);
 });
 </script>
 </body>
