@@ -172,9 +172,99 @@
 
 
 
+
+<style id="app-custom-styles">
+/* Toast Notification Styling */
+#toast-container {
+    position: fixed;
+    top: 24px;
+    right: 24px;
+    z-index: 99999;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    pointer-events: none;
+}
+.toast-msg {
+    pointer-events: auto;
+    background: linear-gradient(135deg, #071e11 0%, #0d301b 100%);
+    border: 1px solid #2e603a;
+    color: #a5d6a7;
+    padding: 14px 20px;
+    border-radius: 12px;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5), 0 0 15px rgba(105, 191, 74, 0.2);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+.toast-msg.show {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
+/* Responsive Hamburger Menu CSS */
+@media (max-width: 768px) {
+    #hamburger-toggle-btn {
+        display: flex !important;
+    }
+    .nav-links-container.mobile-hidden {
+        display: none !important;
+    }
+    .nav-links-container.mobile-visible {
+        display: flex !important;
+        flex-direction: column !important;
+        position: absolute !important;
+        top: 100% !important;
+        left: 0 !important;
+        width: 100% !important;
+        background: #051009 !important;
+        border-bottom: 1px solid #1e472c !important;
+        padding: 16px !important;
+        box-sizing: border-box !important;
+        z-index: 999 !important;
+        gap: 12px !important;
+    }
+}
+</style>
+
 <script>
+// Toast Notification Global Function
+function showToast(message, duration) {
+    duration = duration || 3500;
+    var container = document.getElementById('toast-container');
+    if (!container) {
+        container = document.createElement('div');
+        container.id = 'toast-container';
+        document.body.appendChild(container);
+    }
+    
+    var toast = document.createElement('div');
+    toast.className = 'toast-msg';
+    toast.innerHTML = '<span>' + message + '</span>';
+    container.appendChild(toast);
+
+    setTimeout(function() {
+        toast.classList.add('show');
+    }, 10);
+
+    setTimeout(function() {
+        toast.classList.remove('show');
+        setTimeout(function() {
+            if (toast.parentNode) {
+                toast.parentNode.removeChild(toast);
+            }
+        }, 300);
+    }, duration);
+}
+
 document.addEventListener('DOMContentLoaded', function() {
-    function cleanupGreetingAndLayout() {
+    function syncFullAppLayout() {
         // -------------------------------------------------------------
         // 0. მისალმებიდან "შეფ "-ის ამოღება
         // -------------------------------------------------------------
@@ -186,8 +276,40 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         // -------------------------------------------------------------
-        // 1. "პირადი პროფილი" ღილაკი "გამოსვლა"-ს გვერდით
+        // 1. "პირადი პროფილი" + Hamburger Menu
         // -------------------------------------------------------------
+        var navContainer = document.querySelector('nav') || document.querySelector('header');
+        if (navContainer) {
+            var linksWrapper = navContainer.querySelector('div, ul') || navContainer;
+            if (linksWrapper && !linksWrapper.classList.contains('nav-links-container')) {
+                linksWrapper.classList.add('nav-links-container', 'mobile-hidden');
+            }
+
+            if (!document.getElementById('hamburger-toggle-btn')) {
+                var burgerBtn = document.createElement('button');
+                burgerBtn.id = 'hamburger-toggle-btn';
+                burgerBtn.innerHTML = '☰';
+                burgerBtn.style.cssText = 'display: none; background: #081a0e; border: 1px solid #2e603a; color: #69bf4a; font-size: 22px; border-radius: 8px; padding: 6px 14px; cursor: pointer; align-items: center; justify-content: center;';
+                
+                burgerBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    var targetNav = document.querySelector('.nav-links-container');
+                    if (targetNav) {
+                        if (targetNav.classList.contains('mobile-visible')) {
+                            targetNav.classList.remove('mobile-visible');
+                            targetNav.classList.add('mobile-hidden');
+                        } else {
+                            targetNav.classList.remove('mobile-hidden');
+                            targetNav.classList.add('mobile-visible');
+                        }
+                    }
+                });
+
+                navContainer.style.position = 'relative';
+                navContainer.insertBefore(burgerBtn, navContainer.firstChild);
+            }
+        }
+
         var allNavElements = document.querySelectorAll('button, a, div, span');
         var profileEl = null;
         var logoutEl = null;
@@ -265,7 +387,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         // -------------------------------------------------------------
-        // 3. შეკვეთის მთლიანი პანელის და ჯამის ზოლის გასწორება
+        // 3. შეკვეთის პანელი + Toast შეტყობინების მიბმა
         // -------------------------------------------------------------
         if (dateInput) {
             var orderBar = dateInput.closest('form') || dateInput.closest('.checkout-bar') || dateInput.parentElement.parentElement;
@@ -284,6 +406,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
 
                 if (submitBtn) {
+                    if (!submitBtn.classList.contains('toast-bound')) {
+                        submitBtn.classList.add('toast-bound');
+                        submitBtn.addEventListener('click', function(e) {
+                            showToast('შეკვეთა წარმატებით მიღებულია! 🚀');
+                        });
+                    }
+
                     var submitContainer = submitBtn.parentElement;
                     if (submitContainer && submitContainer !== orderBar && !orderBar.contains(submitContainer)) {
                         submitContainer.style.display = 'flex';
@@ -330,7 +459,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    setInterval(cleanupGreetingAndLayout, 500);
+    setInterval(syncFullAppLayout, 500);
 });
 </script>
 </body>
