@@ -475,3 +475,39 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
+
+// --- Admin Inline Product Price & Image Editor ---
+function initAdminProductEditor() {
+    var isAdmin = document.body.textContent.includes("გამოსვლა (ადმინისტრატორი)") || document.getElementById("admin-nav-link")?.style.display !== "none";
+    if (!isAdmin) return;
+    var cards = document.querySelectorAll(".product-card, .card");
+    cards.forEach(function(card) {
+        if (card.classList.contains("admin-editable")) return;
+        card.classList.add("admin-editable");
+        card.style.position = "relative";
+        var editOverlay = document.createElement("div");
+        editOverlay.style.cssText = "position: absolute; top: 6px; left: 6px; z-index: 25; display: flex; gap: 6px;";
+        editOverlay.innerHTML = "<button class=\"admin-edit-btn\" style=\"background: #1e472c; color: #a5d6a7; border: 1px solid #2e603a; border-radius: 4px; padding: 2px 6px; font-size: 10px; cursor: pointer;\">✏️ რედაქტირება</button>";
+        card.appendChild(editOverlay);
+        var editBtn = editOverlay.querySelector(".admin-edit-btn");
+        editBtn.addEventListener("click", function(e) {
+            e.stopPropagation();
+            var currentPriceEl = card.querySelector(".price, [class*=\"price\"]") || card.querySelector("span:not([class])");
+            var newPrice = prompt("შეიყვანეთ ახალი ფასი (₾):", "9");
+            if (newPrice !== null) {
+                if (currentPriceEl) currentPriceEl.textContent = newPrice + " ₾";
+                showToast("ფასი წარმატებით განახლდა! ✅");
+            }
+            var newImgUrl = prompt("შეიყვანეთ სურათის ახალი URL მისამართი:", "");
+            if (newImgUrl) {
+                var imgEl = card.querySelector("img");
+                if (imgEl) {
+                    imgEl.src = newImgUrl;
+                    showToast("სურათი წარმატებით შეიცვალა! 🖼️");
+                }
+            }
+        });
+    });
+}
+setInterval(initAdminProductEditor, 1000);
