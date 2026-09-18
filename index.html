@@ -168,11 +168,12 @@
 
 
 
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    function reorderLayoutElements() {
+    function applyExactScreenshotLayout() {
         // -------------------------------------------------------------
-        // 1. "პირადი პროფილი" ღილაკის განთავსება "გამოსვლა"-ს გვერდით
+        // 1. "პირადი პროფილი" ღილაკი "გამოსვლა"-ს გვერდით
         // -------------------------------------------------------------
         var allNavElements = document.querySelectorAll('button, a, div, span');
         var profileEl = null;
@@ -209,7 +210,7 @@ document.addEventListener('DOMContentLoaded', function() {
             
             var subWrapper = document.createElement('div');
             subWrapper.id = 'recurring-subscription-box';
-            subWrapper.style.cssText = 'display: flex; flex-direction: column; gap: 6px; background: #051009; border: 1px solid #1e472c; border-radius: 10px; padding: 10px 14px; min-width: 240px;';
+            subWrapper.style.cssText = 'display: flex; flex-direction: column; gap: 6px; background: #051009; border: 1px solid #1e472c; border-radius: 10px; padding: 10px 14px; min-width: 260px;';
             
             subWrapper.innerHTML = 
                 '<div style="display: flex; align-items: center; justify-content: space-between;">' +
@@ -217,14 +218,14 @@ document.addEventListener('DOMContentLoaded', function() {
                         '🔄 პერიოდული გამოწერა (ავტომატური შეკვეთა)' +
                     '</label>' +
                 '</div>' +
-                '<select id="subscription-freq-select" style="background: #081a0e; border: 1px solid #2e603a; border-radius: 6px; color: #a5d6a7; padding: 6px 10px; font-size: 12px; font-weight: 600; outline: none; cursor: pointer;">' +
+                '<select id="subscription-freq-select" style="background: #081a0e; border: 1px solid #2e603a; border-radius: 6px; color: #a5d6a7; padding: 6px 10px; font-size: 12px; font-weight: 600; outline: none; cursor: pointer; width: 100%;">' +
                     '<option value="one-time">🚀 ერთჯერადი შეკვეთა</option>' +
                     '<option value="tue-fri" selected>📅 კვირაში 2-ჯერ (სამშაბათი & პარასკევი)</option>' +
                     '<option value="weekly-tue">📅 კვირაში 1-ხელ (სამშაბათი)</option>' +
                 '</select>' +
-                '<div id="days-selector-wrapper" style="display: flex; gap: 10px; font-size: 11px; color: #a5d6a7; margin-top: 2px;">' +
-                    '<label style="cursor:pointer; display:flex; align-items:center; gap:3px;"><input type="checkbox" id="day-tue" checked style="accent-color:#69bf4a;"> სამშაბათი</label>' +
-                    '<label style="cursor:pointer; display:flex; align-items:center; gap:3px;"><input type="checkbox" id="day-fri" checked style="accent-color:#69bf4a;"> პარასკევი</label>' +
+                '<div id="days-selector-wrapper" style="display: flex; gap: 12px; font-size: 11px; color: #a5d6a7; margin-top: 2px;">' +
+                    '<label style="cursor:pointer; display:flex; align-items:center; gap:4px;"><input type="checkbox" id="day-tue" checked style="accent-color:#69bf4a;"> სამშაბათი</label>' +
+                    '<label style="cursor:pointer; display:flex; align-items:center; gap:4px;"><input type="checkbox" id="day-fri" checked style="accent-color:#69bf4a;"> პარასკევი</label>' +
                 '</div>' +
                 '<span style="font-size: 10px; color: #78a883;">🌱 რესტორანს ავტომატურად მოემარაგება ახალი მიკრომწვანილი</span>';
 
@@ -251,7 +252,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         // -------------------------------------------------------------
-        // 3. შეკვეთის მთლიანი პანელის გადატანა ასორტიმენტის ბადის ქვემოთ
+        // 3. შეკვეთის მთლიანი ზოლის ფორმატირება (სქრინშოტის მიხედვით)
         // -------------------------------------------------------------
         if (dateInput) {
             var orderBar = dateInput.closest('form') || dateInput.closest('.checkout-bar') || dateInput.parentElement.parentElement;
@@ -260,9 +261,11 @@ document.addEventListener('DOMContentLoaded', function() {
             if (orderBar && firstCard) {
                 var productsGrid = firstCard.parentElement;
                 if (productsGrid && orderBar.previousElementSibling !== productsGrid) {
-                    orderBar.style.marginTop = '30px';
                     productsGrid.parentNode.insertBefore(orderBar, productsGrid.nextSibling);
                 }
+
+                // ზოლის სტილიზაცია სქრინის მიხედვით
+                orderBar.style.cssText = 'display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; background: #071e11; border: 1px solid #1e472c; border-radius: 16px; padding: 18px 24px; margin-top: 30px; width: 100%; box-sizing: border-box;';
             }
         }
 
@@ -297,7 +300,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    setInterval(reorderLayoutElements, 500);
+    setInterval(applyExactScreenshotLayout, 500);
 });
 </script>
 </body>
