@@ -160,10 +160,11 @@
 
 
 
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    function initCustomFeatures() {
-        // 1. მიწოდების გრაფიკი
+    function fixLayoutAndPosition() {
+        // 1. მიწოდების გრაფიკის ბლოკი
         var dateInput = document.getElementById('order-date') || document.querySelector('input[type="date"]');
         if (dateInput && !document.getElementById('order-subscription-select')) {
             var parentContainer = dateInput.parentElement;
@@ -179,25 +180,25 @@ document.addEventListener('DOMContentLoaded', function() {
             parentContainer.parentNode.insertBefore(subWrapper, parentContainer.nextSibling);
         }
 
-        // 2. Tray vs Cut არჩევანი პროდუქტის ბარათებზე
+        // 2. Tray vs Cut არჩევანის განთავსება ზედა მარჯვენა კუთხეში
         var cards = document.querySelectorAll('div[class*="card"], div[class*="product"], .product-card');
         cards.forEach(function(card) {
-            if (!card.querySelector('.pkg-select')) {
+            card.style.position = 'relative';
+
+            if (!card.querySelector('.card-pkg-select-top')) {
                 var selectDiv = document.createElement('div');
-                selectDiv.style.cssText = 'margin: 8px 0; width: 100%;';
-                selectDiv.innerHTML = '<select class="pkg-select" style="background: #051009; border: 1px solid #2e603a; border-radius: 6px; color: #a5d6a7; padding: 6px; font-size: 12px; width: 100%; outline: none; cursor: pointer;">' +
-                    '<option value="tray">🌱 ცოცხალი ლანგარი (Tray)</option>' +
-                    '<option value="cut">✂️ მოჭრილი / შეფუთული (Cut)</option>' +
+                selectDiv.className = 'card-pkg-select-top';
+                selectDiv.style.cssText = 'position: absolute; top: 12px; right: 12px; z-index: 10;';
+                selectDiv.innerHTML = '<select class="pkg-select" style="background: #081a0e; border: 1px solid #2e603a; border-radius: 8px; color: #a5d6a7; padding: 4px 8px; font-size: 11px; font-weight: 600; outline: none; cursor: pointer;">' +
+                    '<option value="tray">🌱 ლანგარი</option>' +
+                    '<option value="cut">✂️ მოჭრილი</option>' +
                     '</select>';
-                var btn = card.querySelector('button') || card.querySelector('.quantity-controls') || card.lastElementChild;
-                if (btn) {
-                    btn.parentNode.insertBefore(selectDiv, btn);
-                }
+                card.appendChild(selectDiv);
             }
         });
     }
 
-    setInterval(initCustomFeatures, 500);
+    setInterval(fixLayoutAndPosition, 400);
 });
 </script>
 </body>
