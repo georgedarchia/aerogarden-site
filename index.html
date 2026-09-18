@@ -171,9 +171,20 @@
 
 
 
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    function embedSubmitButtonInsideBar() {
+    function cleanupGreetingAndLayout() {
+        // -------------------------------------------------------------
+        // 0. მისალმებიდან "შეფ "-ის ამოღება
+        // -------------------------------------------------------------
+        var allElements = document.querySelectorAll('p, div, span, h1, h2, h3, h4, header');
+        allElements.forEach(function(el) {
+            if (el.children.length === 0 && el.textContent.includes('მოგესალმებით, შეფ')) {
+                el.textContent = el.textContent.replace('მოგესალმებით, შეფ ', 'მოგესალმებით, ');
+            }
+        });
+
         // -------------------------------------------------------------
         // 1. "პირადი პროფილი" ღილაკი "გამოსვლა"-ს გვერდით
         // -------------------------------------------------------------
@@ -254,7 +265,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         // -------------------------------------------------------------
-        // 3. შეკვეთის გაგზავნის ღილაკისა და ჯამის ჩასმა ბლოკის შიგნით
+        // 3. შეკვეთის მთლიანი პანელის და ჯამის ზოლის გასწორება
         // -------------------------------------------------------------
         if (dateInput) {
             var orderBar = dateInput.closest('form') || dateInput.closest('.checkout-bar') || dateInput.parentElement.parentElement;
@@ -268,7 +279,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 orderBar.style.cssText = 'display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; background: #071e11; border: 1px solid #1e472c; border-radius: 16px; padding: 18px 24px; margin-top: 30px; width: 100%; box-sizing: border-box;';
 
-                // გაგზავნის ღილაკისა და ჯამის მოძებნა და შიგნით ჩასმა
                 var submitBtn = Array.from(document.querySelectorAll('button')).find(function(b) {
                     return b.textContent.includes('შეკვეთის გაგზავნა');
                 });
@@ -320,7 +330,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    setInterval(embedSubmitButtonInsideBar, 500);
+    setInterval(cleanupGreetingAndLayout, 500);
 });
 </script>
 </body>
