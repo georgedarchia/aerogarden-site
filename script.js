@@ -511,17 +511,22 @@ function initAdminProductEditor() {
     });
 }
 setInterval(initAdminProductEditor, 1000);
-// --- Admin Inline Product Price & Image Editor ---
+// --- Strict Admin-Only Product Price & Image Editor ---
 function initAdminProductEditor() {
-    // ვამოწმებთ, არის თუ არა ადმინი საიტზე (ნავიგაციაში ან ტექსტში)
-    var adminNav = document.getElementById('admin-nav-link');
-    var isHeaderAdmin = document.body.textContent.includes('ადმინისტრატոր') || document.body.textContent.includes('ადმინი') || (adminNav && adminNav.style.display !== 'none');
+    // მკაცრად ვამოწმებთ, რომ გვერდზე მითითებულია ზუსტად ადმინისტრატორის სტატუსი
+    var bodyText = document.body.textContent || '';
+    var isAdmin = bodyText.includes('გამოსვლა (ადმინისტრატორი)') || bodyText.includes('ადმინისტრატო');
     
-    // თუ გვერდზე ხართ როგორც ადმინი, ვამატებთ ღილაკებს
+    // თუ არ არის ადმინი, ვეძებთ და ვშლით ძველ ღილაკებს თუ სადმე დარჩა
+    if (!isAdmin) {
+        document.querySelectorAll('.admin-edit-btn').forEach(btn => btn.remove());
+        return;
+    }
+
+    // ვამატებთ რედაქტირების ღილაკებს მხოლოდ მაშინ, თუ ნამდვილად ადმინია
     var cards = document.querySelectorAll('.product-card, .card');
     cards.forEach(function(card) {
-        if (card.classList.contains('admin-editable')) return;
-        card.classList.add('admin-editable');
+        if (card.querySelector('.admin-edit-btn')) return;
         card.style.position = 'relative';
 
         var editBtn = document.createElement('button');
@@ -561,5 +566,5 @@ function initAdminProductEditor() {
     });
 }
 
-// მუდმივად ვამოწმებთ პროდუქტების გამოჩენას
-setInterval(initAdminProductEditor, 800);
+// მუდმივად ვაკონტროლებთ სტატუსს
+setInterval(initAdminProductEditor, 1000);
