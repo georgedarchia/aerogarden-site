@@ -199,5 +199,56 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 </script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // 1. შეკვეთის გაფორმების ზოლში გრაფიკის ჩასმა
+    function injectSubscription() {
+        if (!document.getElementById('order-subscription')) {
+            const dateInput = document.getElementById('order-date') || document.querySelector('input[type="date"]');
+            if (dateInput) {
+                const subDiv = document.createElement('div');
+                subDiv.style.cssText = 'display:flex; flex-direction:column; gap:4px;';
+                subDiv.innerHTML = \
+                    <label style="color:#92be9c; font-size:12px; font-weight:600;">🔄 გრაფიკი:</label>
+                    <select id="order-subscription" class="subscription-select" style="background:#051009; border:1px solid #1e472c; border-radius:8px; color:#a5d6a7; padding:10px 12px; font-size:13px; outline:none;">
+                        <option value="one-time">🚀 ერთჯერადი</option>
+                        <option value="weekly-tue-fri">📅 კვირაში 2-ჯერ (სამშაბათი/პარასკევი)</option>
+                        <option value="weekly-mon">📅 ორშაბათობით</option>
+                        <option value="biweekly">📆 2 კვირაში 1-ხელ</option>
+                    </select>
+                \;
+                const container = dateInput.closest('div') || dateInput.parentElement;
+                container.parentNode.insertBefore(subDiv, container.nextSibling);
+            }
+        }
+    }
+
+    // 2. პროდუქტის ბარათებში (Tray vs Cut) არჩევანის ჩასმა
+    function injectPackageTypes() {
+        const cards = document.querySelectorAll('div[class*="card"], div[class*="product"]');
+        cards.forEach(card => {
+            if (!card.querySelector('.package-type-select') && card.querySelector('button, input, .quantity-controls')) {
+                const selectDiv = document.createElement('div');
+                selectDiv.className = 'package-type-wrapper';
+                selectDiv.style.cssText = 'margin: 8px 0; width: 100%;';
+                selectDiv.innerHTML = \
+                    <select class="package-type-select" style="background: #051009; border: 1px solid #1e472c; border-radius: 6px; color: #a5d6a7; padding: 6px 8px; font-size: 12px; width: 100%; outline:none;">
+                        <option value="tray">🌱 ცოცხალი ლანგარი (Tray)</option>
+                        <option value="cut">✂️ მოჭრილი / შეფუთული (Cut)</option>
+                    </select>
+                \;
+                const btnOrControls = card.querySelector('button') || card.children[card.children.length - 1];
+                btnOrControls.parentNode.insertBefore(selectDiv, btnOrControls);
+            }
+        });
+    }
+
+    // პერიოდული შემოწმება დინამიურად ჩატვირთული ბარათებისთვის
+    setInterval(function() {
+        injectSubscription();
+        injectPackageTypes();
+    }, 800);
+});
+</script>
 </body>
 </html>
