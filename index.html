@@ -167,11 +167,12 @@
 
 
 
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    function updateAppLayout() {
+    function reorderLayoutElements() {
         // -------------------------------------------------------------
-        // 1. "პირადი პროფილი" ღილაკის გადატანა "გამოსვლა"-ს გვერდით
+        // 1. "პირადი პროფილი" ღილაკის განთავსება "გამოსვლა"-ს გვერდით
         // -------------------------------------------------------------
         var allNavElements = document.querySelectorAll('button, a, div, span');
         var profileEl = null;
@@ -194,7 +195,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 logoutParent.style.alignItems = 'center';
                 logoutParent.style.gap = '10px';
                 logoutParent.style.justifyContent = 'flex-end';
-                
                 profileEl.style.margin = '0';
                 logoutParent.insertBefore(profileEl, logoutEl);
             }
@@ -209,7 +209,7 @@ document.addEventListener('DOMContentLoaded', function() {
             
             var subWrapper = document.createElement('div');
             subWrapper.id = 'recurring-subscription-box';
-            subWrapper.style.cssText = 'display: flex; flex-direction: column; gap: 6px; background: #051009; border: 1px solid #1e472c; border-radius: 10px; padding: 10px 14px; margin-top: 6px; min-width: 240px;';
+            subWrapper.style.cssText = 'display: flex; flex-direction: column; gap: 6px; background: #051009; border: 1px solid #1e472c; border-radius: 10px; padding: 10px 14px; min-width: 240px;';
             
             subWrapper.innerHTML = 
                 '<div style="display: flex; align-items: center; justify-content: space-between;">' +
@@ -251,7 +251,23 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         // -------------------------------------------------------------
-        // 3. Tray vs Cut სელექტორი ბარათის ზედა მარჯვენა კუთხეში
+        // 3. შეკვეთის მთლიანი პანელის გადატანა ასორტიმენტის ბადის ქვემოთ
+        // -------------------------------------------------------------
+        if (dateInput) {
+            var orderBar = dateInput.closest('form') || dateInput.closest('.checkout-bar') || dateInput.parentElement.parentElement;
+            var firstCard = document.querySelector('.product-card') || document.querySelector('.card');
+            
+            if (orderBar && firstCard) {
+                var productsGrid = firstCard.parentElement;
+                if (productsGrid && orderBar.previousElementSibling !== productsGrid) {
+                    orderBar.style.marginTop = '30px';
+                    productsGrid.parentNode.insertBefore(orderBar, productsGrid.nextSibling);
+                }
+            }
+        }
+
+        // -------------------------------------------------------------
+        // 4. Tray vs Cut სელექტორი ბარათზე
         // -------------------------------------------------------------
         var buttons = document.querySelectorAll('button');
         buttons.forEach(function(btn) {
@@ -281,7 +297,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    setInterval(updateAppLayout, 500);
+    setInterval(reorderLayoutElements, 500);
 });
 </script>
 </body>
