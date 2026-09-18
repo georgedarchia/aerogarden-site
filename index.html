@@ -150,5 +150,53 @@
             </div>
         </div>
     </section>
+<!-- Lightbox Image Zoom Modal -->
+<div id="image-lightbox-modal" class="lightbox-modal">
+    <span class="lightbox-close">&times;</span>
+    <img class="lightbox-content" id="lightbox-img" alt="Enlarged Image">
+    <div id="lightbox-caption"></div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const modal = document.getElementById('image-lightbox-modal');
+    const modalImg = document.getElementById('lightbox-img');
+    const captionText = document.getElementById('lightbox-caption');
+    const closeBtn = document.querySelector('.lightbox-close');
+
+    // გალერეის ნებისმიერ ფოტოზე დაწკაპუნებისას გადიდება
+    document.body.addEventListener('click', function(e) {
+        if (e.target && e.target.tagName === 'IMG' && (e.target.closest('.gallery-card') || e.target.closest('#gallery-section') || e.target.classList.contains('gallery-img'))) {
+            modal.style.display = "flex";
+            modalImg.src = e.target.src;
+            
+            // ბარათის სათაურის წამოღება
+            const card = e.target.closest('.gallery-card');
+            const title = card ? card.querySelector('h3, h4')?.innerText : e.target.alt;
+            captionText.innerText = title || e.target.alt || '';
+        }
+    });
+
+    if (closeBtn) {
+        closeBtn.onclick = function() {
+            modal.style.display = "none";
+        };
+    }
+
+    if (modal) {
+        modal.onclick = function(e) {
+            if (e.target === modal || e.target === closeBtn) {
+                modal.style.display = "none";
+            }
+        };
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === "Escape" && modal && modal.style.display !== "none") {
+            modal.style.display = "none";
+        }
+    });
+});
+</script>
 </body>
 </html>
