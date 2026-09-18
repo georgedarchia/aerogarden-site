@@ -511,22 +511,44 @@ function initAdminProductEditor() {
     });
 }
 setInterval(initAdminProductEditor, 1000);
-// --- Strict Admin Email Product Price & Image Editor ---
+// --- Persistent Admin Price & Image Editor (LocalStorage) ---
 function initAdminProductEditor() {
     var bodyText = document.body.textContent || '';
-    
-    // ვამოწმებთ, რომ შესულია ზუსტად admin@aerogarden.ge ელფოსტით ან ადმინისტრატორის პანელით
     var isAdmin = bodyText.includes('admin@aerogarden.ge') || bodyText.includes('გამოსვლა (ადმინისტრატორი)') || bodyText.includes('ადმინისტრატო');
     
-    // თუ არ არის ეს ადმინი, ვქაჩავთ და ვშლით ღილაკებს
-    if (!isAdmin) {
-        document.querySelectorAll('.admin-edit-btn').forEach(btn => btn.remove());
-        return;
-    }
-
-    // ვამატებთ რედაქტირების ღილაკებს მხოლოდ ადმინისტრატორისთვის
     var cards = document.querySelectorAll('.product-card, .card');
-    cards.forEach(function(card) {
+    
+    cards.forEach(function(card, index) {
+        // ვანიჭებთ უნიკალურ აიდის თითოეულ პროდუქტს, რომ დამახოვრება შევძლოთ
+        if (!card.getAttribute('data-product-id')) {
+            var titleEl = card.querySelector('h3, h4, .title, [class*="title"]') || card.querySelector('strong');
+            var pName = titleEl ? titleEl.textContent.trim() : ('product_' + index);
+            card.setAttribute('data-product-id', pName);
+        }
+        
+        var pId = card.getAttribute('data-product-id');
+        var currentPriceEl = card.querySelector('.price, [class*="price"]') || card.querySelector('span:not([class])');
+        var imgEl = card.querySelector('img');
+
+        // ვამოწმებთ, არის თუ არა ამ პროდუქტზე ფასი ან სურათი უკვე შეცვლილი და შენახული
+        var savedPrice = localStorage.getItem('price_' + pId);
+        var savedImg = localStorage.getItem('img_' + pId);
+
+        if (savedPrice && currentPriceEl) {
+            currentPriceEl.textContent = savedPrice + ' ₾';
+        }
+        if (savedImg && imgEl) {
+            imgEl.src = savedImg;
+        }
+
+        // თუ არ არის ადმინი, ვთიშავთ რედაქტირების ღილაკებს
+        if (!isAdmin) {
+            var existingBtn = card.querySelector('.admin-edit-btn');
+            if (existingBtn) existingBtn.remove();
+            return;
+        }
+
+        // ვამატებთ რედაქტირების ღილაკს მხოლოდ ადმინისტრატორისთვის
         if (card.querySelector('.admin-edit-btn')) return;
         card.style.position = 'relative';
 
@@ -537,25 +559,25 @@ function initAdminProductEditor() {
         
         editBtn.addEventListener('click', function(e) {
             e.stopPropagation();
-            var currentPriceEl = card.querySelector('.price, [class*="price"]') || card.querySelector('span:not([class])');
             
-            var newPrice = prompt('შეიყვანეთ ახალი ფასი (₾):', '9');
+            var newPrice = prompt('შეიყვანეთ ახალი ფასი (₾):', savedPrice || '9');
             if (newPrice !== null && newPrice.trim() !== '') {
+                localStorage.setItem('price_' + pId, newPrice.trim());
                 if (currentPriceEl) {
-                    currentPriceEl.textContent = newPrice + ' ₾';
+                    currentPriceEl.textContent = newPrice.trim() + ' ₾';
                 }
                 if (typeof showToast === 'function') {
-                    showToast('ფასი წარმატებით განახლდა! ✅');
+                    showToast('ფასი წარმატებით შეინახა! ✅');
                 } else {
-                    alert('ფასი წარმატებით განახლდა!');
+                    alert('ფასი წარმატებით შეინახა!');
                 }
             }
 
-            var newImgUrl = prompt('შეიყვანეთ სურათის ახალი URL მისამართი:', '');
+            var newImgUrl = prompt('შეიყვანეთ სურათის ახალი URL მისამართი:', savedImg || '');
             if (newImgUrl !== null && newImgUrl.trim() !== '') {
-                var imgEl = card.querySelector('img');
+                localStorage.setItem('img_' + pId, newImgUrl.trim());
                 if (imgEl) {
-                    imgEl.src = newImgUrl;
+                    imgEl.src = newImgUrl.trim();
                     if (typeof showToast === 'function') {
                         showToast('სურათი წარმატებით შეიცვალა! 🖼️');
                     }
@@ -567,5 +589,5 @@ function initAdminProductEditor() {
     });
 }
 
-// მუდმივად ვაკონტროლებთ ავტორიზაციის სტატუსს
+// მუდმივად ვაკონტროლებთ გვერდს
 setInterval(initAdminProductEditor, 1000);
