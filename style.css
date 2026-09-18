@@ -655,3 +655,21 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     color: #8bb397;
     font-size: 13px;
 }
+
+/* ==========================================
+   🛠️ შეკვეთების სექციის დაშორების გასწორება
+========================================== */
+section, .container {
+    scroll-margin-top: 100px !important;
+}
+
+#chef-orders-section {
+    padding-top: 30px !important;
+    margin-top: 20px !important;
+}
+
+/* შეკვეთის ბარათის შიდა დაშორება */
+.order-card, .order-item, div[class*="order"] {
+    padding-top: 25px !important;
+    overflow: visible !important;
+}
