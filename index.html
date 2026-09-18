@@ -162,6 +162,7 @@
 
 
 
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     function applyCardFeatures() {
@@ -182,19 +183,21 @@ document.addEventListener('DOMContentLoaded', function() {
             parentContainer.parentNode.insertBefore(subWrapper, parentContainer.nextSibling);
         }
 
-        // 2. Tray vs Cut სელექტორი ბარათის ზედა მარჯვენა კუთხეში (ზუსტად 1 ცალი)
+        // 2. Tray vs Cut სელექტორი ბარათის მთავარ ზედა მარჯვენა კუთხეში
         var buttons = document.querySelectorAll('button');
         buttons.forEach(function(btn) {
-            if (btn.textContent.trim().includes('დამატება')) {
-                var card = btn.closest('div');
+            var btnText = btn.textContent.trim();
+            if (btnText.includes('დამატება') || btnText === '+' || btnText === '-') {
+                // ვპოულობთ ბარათის ყველაზე გარეთა მთავარ ჩარჩოს
+                var card = btn.closest('.product-card') || btn.closest('.card') || btn.parentElement.parentElement;
                 if (card && !card.classList.contains('pkg-processed')) {
                     card.classList.add('pkg-processed');
                     card.style.position = 'relative';
 
                     var selectDiv = document.createElement('div');
                     selectDiv.className = 'pkg-dropdown-top-right';
-                    selectDiv.style.cssText = 'position: absolute; top: 10px; right: 10px; z-index: 10;';
-                    selectDiv.innerHTML = '<select class="pkg-select" style="background: #081a0e; border: 1px solid #2e603a; border-radius: 8px; color: #a5d6a7; padding: 4px 8px; font-size: 11px; font-weight: 600; outline: none; cursor: pointer;">' +
+                    selectDiv.style.cssText = 'position: absolute; top: 12px; right: 16px; z-index: 20;';
+                    selectDiv.innerHTML = '<select class="pkg-select" style="background: #051009; border: 1px solid #2e603a; border-radius: 6px; color: #a5d6a7; padding: 4px 8px; font-size: 11px; font-weight: 600; outline: none; cursor: pointer;">' +
                         '<option value="tray">🌱 ლანგარი</option>' +
                         '<option value="cut">✂️ მოჭრილი</option>' +
                         '</select>';
