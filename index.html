@@ -169,9 +169,10 @@
 
 
 
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    function applyExactScreenshotLayout() {
+    function syncFullAppLayout() {
         // -------------------------------------------------------------
         // 1. "პირადი პროფილი" ღილაკი "გამოსვლა"-ს გვერდით
         // -------------------------------------------------------------
@@ -210,7 +211,7 @@ document.addEventListener('DOMContentLoaded', function() {
             
             var subWrapper = document.createElement('div');
             subWrapper.id = 'recurring-subscription-box';
-            subWrapper.style.cssText = 'display: flex; flex-direction: column; gap: 6px; background: #051009; border: 1px solid #1e472c; border-radius: 10px; padding: 10px 14px; min-width: 260px;';
+            subWrapper.style.cssText = 'display: flex; flex-direction: column; gap: 6px; background: #051009; border: 1px solid #1e472c; border-radius: 10px; padding: 10px 14px; min-width: 250px;';
             
             subWrapper.innerHTML = 
                 '<div style="display: flex; align-items: center; justify-content: space-between;">' +
@@ -223,9 +224,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     '<option value="tue-fri" selected>📅 კვირაში 2-ჯერ (სამშაბათი & პარასკევი)</option>' +
                     '<option value="weekly-tue">📅 კვირაში 1-ხელ (სამშაბათი)</option>' +
                 '</select>' +
-                '<div id="days-selector-wrapper" style="display: flex; gap: 12px; font-size: 11px; color: #a5d6a7; margin-top: 2px;">' +
-                    '<label style="cursor:pointer; display:flex; align-items:center; gap:4px;"><input type="checkbox" id="day-tue" checked style="accent-color:#69bf4a;"> სამშაბათი</label>' +
-                    '<label style="cursor:pointer; display:flex; align-items:center; gap:4px;"><input type="checkbox" id="day-fri" checked style="accent-color:#69bf4a;"> პარასკევი</label>' +
+                '<div id="days-selector-wrapper" style="display: flex; gap: 10px; font-size: 11px; color: #a5d6a7; margin-top: 2px;">' +
+                    '<label style="cursor:pointer; display:flex; align-items:center; gap:3px;"><input type="checkbox" id="day-tue" checked style="accent-color:#69bf4a;"> სამშაბათი</label>' +
+                    '<label style="cursor:pointer; display:flex; align-items:center; gap:3px;"><input type="checkbox" id="day-fri" checked style="accent-color:#69bf4a;"> პარასკევი</label>' +
                 '</div>' +
                 '<span style="font-size: 10px; color: #78a883;">🌱 რესტორანს ავტომატურად მოემარაგება ახალი მიკრომწვანილი</span>';
 
@@ -252,7 +253,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         // -------------------------------------------------------------
-        // 3. შეკვეთის მთლიანი ზოლის ფორმატირება (სქრინშოტის მიხედვით)
+        // 3. შეკვეთის მთლიანი პანელის და ჯამის ზოლის გასწორება
         // -------------------------------------------------------------
         if (dateInput) {
             var orderBar = dateInput.closest('form') || dateInput.closest('.checkout-bar') || dateInput.parentElement.parentElement;
@@ -264,7 +265,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     productsGrid.parentNode.insertBefore(orderBar, productsGrid.nextSibling);
                 }
 
-                // ზოლის სტილიზაცია სქრინის მიხედვით
+                // მთლიანი პანელის სტილიზაცია
                 orderBar.style.cssText = 'display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; background: #071e11; border: 1px solid #1e472c; border-radius: 16px; padding: 18px 24px; margin-top: 30px; width: 100%; box-sizing: border-box;';
             }
         }
@@ -300,7 +301,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    setInterval(applyExactScreenshotLayout, 500);
+    setInterval(syncFullAppLayout, 500);
 });
 </script>
 </body>
