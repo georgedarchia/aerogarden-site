@@ -609,5 +609,46 @@ document.addEventListener('DOMContentLoaded', function() {
     setInterval(syncFullAppLayout, 400);
 });
 </script>
+<script id="remove-profile-from-index">
+document.addEventListener('DOMContentLoaded', function() {
+    // 1. მთავარ გვერდზე პროფილის კონტეინერის სრული წაშლა
+    function purgeProfileFromIndex() {
+        var allElements = document.querySelectorAll('div, section, form, h1, h2, h3');
+        allElements.forEach(function(el) {
+            if (el.textContent.includes('პირადი პროფილი & მისამართი')) {
+                var targetBox = el;
+                // ავალთ ზევით im-მნახველ კონტეინერამდე, რომელსაც აქვს ინპუტები
+                while (targetBox && targetBox !== document.body) {
+                    if (targetBox.querySelector('input') || targetBox.classList.contains('card')) {
+                        targetBox.remove();
+                        break;
+                    }
+                    targetBox = targetBox.parentElement;
+                }
+            }
+        });
+
+        // 2. ნავიგაციის "პირადი პროფილი" ღილაკის გადამისამართება profile.html-ზე
+        var navBtns = document.querySelectorAll('button, a, div, span');
+        navBtns.forEach(function(btn) {
+            if (btn.children.length === 0 && btn.textContent.trim().includes('პირადი პროფილი')) {
+                var parentAnchor = btn.closest('a');
+                if (parentAnchor) {
+                    parentAnchor.href = 'profile.html';
+                } else {
+                    var el = btn.closest('button') || btn;
+                    el.onclick = function(e) {
+                        e.preventDefault();
+                        window.location.href = 'profile.html';
+                    };
+                }
+            }
+        });
+    }
+
+    purgeProfileFromIndex();
+    setInterval(purgeProfileFromIndex, 300);
+});
+</script>
 </body>
 </html>
