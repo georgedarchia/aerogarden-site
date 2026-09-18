@@ -188,6 +188,9 @@
 
 
 
+
+
+
 <style id="app-custom-styles">
 /* Toast Notification Styling */
 #toast-container {
@@ -281,7 +284,23 @@ function showToast(message, duration) {
 document.addEventListener('DOMContentLoaded', function() {
     function syncFullAppLayout() {
         // -------------------------------------------------------------
-        // 0. მისალმებიდან "შეფ "-ის ამოღება
+        // 0. გაუქმებული შეკვეთების დამალვა სიიდან
+        // -------------------------------------------------------------
+        var allBadges = document.querySelectorAll('button, span, div');
+        allBadges.forEach(function(el) {
+            if (el.children.length === 0 && el.textContent.includes('გაუქმებულია')) {
+                var orderCard = el.closest('.order-card') || el.closest('.card') || el.parentElement;
+                while (orderCard && !orderCard.textContent.includes('ORD-') && orderCard.parentElement !== document.body) {
+                    orderCard = orderCard.parentElement;
+                }
+                if (orderCard && orderCard.style.display !== 'none') {
+                    orderCard.style.display = 'none';
+                }
+            }
+        });
+
+        // -------------------------------------------------------------
+        // 1. მისალმებიდან "შეფ "-ის ამოღება
         // -------------------------------------------------------------
         var allElements = document.querySelectorAll('p, div, span, h1, h2, h3, h4, header');
         allElements.forEach(function(el) {
@@ -291,7 +310,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         // -------------------------------------------------------------
-        // 1. "პირადი პროფილი" + Hamburger Menu
+        // 2. "პირადი პროფილი" + Hamburger Menu
         // -------------------------------------------------------------
         var navContainer = document.querySelector('nav') || document.querySelector('header');
         if (navContainer) {
@@ -352,7 +371,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         // -------------------------------------------------------------
-        // 2. პერიოდული გამოწერის ბლოკი
+        // 3. პერიოდული გამოწერის ბლოკი
         // -------------------------------------------------------------
         var dateInput = document.getElementById('order-date') || document.querySelector('input[type="date"]');
         if (dateInput && !document.getElementById('recurring-subscription-box')) {
@@ -402,7 +421,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         // -------------------------------------------------------------
-        // 3. შეკვეთის პანელი + Toast შეტყობინების მიბმა
+        // 4. შეკვეთის პანელი + Toast შეტყობინების მიბმა
         // -------------------------------------------------------------
         if (dateInput) {
             var orderBar = dateInput.closest('form') || dateInput.closest('.checkout-bar') || dateInput.parentElement.parentElement;
@@ -444,7 +463,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         // -------------------------------------------------------------
-        // 4. Tray vs Cut სელექტორი ბარათზე
+        // 5. Tray vs Cut სელექტორი ბარათზე
         // -------------------------------------------------------------
         var buttons = document.querySelectorAll('button');
         buttons.forEach(function(btn) {
@@ -474,7 +493,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    setInterval(syncFullAppLayout, 500);
+    setInterval(syncFullAppLayout, 400);
 });
 </script>
 </body>
