@@ -964,3 +964,40 @@ div:has(#order-date) {
 .nav-links li:last-child {
     margin-left: auto !important;
 }
+
+/* ==========================================
+   🌱 შეფუთვის ტიპის და გამოწერის სტილები
+========================================== */
+.package-type-wrapper {
+    margin-top: 10px;
+    margin-bottom: 8px;
+}
+
+.package-type-select, .subscription-select {
+    background: #051009 !important;
+    border: 1px solid #1e472c !important;
+    border-radius: 8px !important;
+    color: #a5d6a7 !important;
+    padding: 8px 12px !important;
+    font-size: 13px !important;
+    width: 100% !important;
+    cursor: pointer !important;
+    outline: none !important;
+    transition: border-color 0.2s ease !important;
+}
+
+.package-type-select:focus, .subscription-select:focus {
+    border-color: #69bf4a !important;
+}
+
+.subscription-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.subscription-wrapper label {
+    color: #92be9c !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+}
