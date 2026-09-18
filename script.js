@@ -137,7 +137,6 @@ async function updateUI() {
     if (currentUser) {
         if (authBtn) authBtn.innerText = 'გამოსვლა (' + currentUser.name + ')';
         if (currentUser.role === 'admin') {
-            if (welcome) welcome.innerText = 'მოგესალმებით, ადმინისტრატორო!';
             if (adminNav) adminNav.style.display = 'inline-block';
             if (adminSec) adminSec.style.display = 'block';
             if (chefNav) chefNav.style.display = 'none';
@@ -147,7 +146,6 @@ async function updateUI() {
             if (orderActionBox) orderActionBox.style.display = 'none';
             await renderAdminOrders();
         } else {
-            if (welcome) welcome.innerText = 'მოგესალმებით, შეფ ' + currentUser.name + ' (' + currentUser.restaurant + ')';
             if (adminNav) adminNav.style.display = 'none';
             if (adminSec) adminSec.style.display = 'none';
             if (chefNav) chefNav.style.display = 'inline-block';
