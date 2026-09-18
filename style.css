@@ -883,3 +883,25 @@ div:has(#order-date) {
 .nav-links-right {
     margin-left: auto !important;
 }
+
+/* ==========================================
+   📐 ლოგოს ზომის გასწორება
+========================================== */
+.logo img, .logo-img, a.logo img, header .logo img {
+    max-height: 40px !important;
+    height: 40px !important;
+    width: auto !important;
+    max-width: 160px !important;
+    object-fit: contain !important;
+    display: inline-block !important;
+    vertical-align: middle !important;
+}
+
+.logo, a.logo {
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    height: 40px !important;
+    text-decoration: none !important;
+    overflow: hidden !important;
+}
