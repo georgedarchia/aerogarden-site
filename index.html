@@ -170,9 +170,10 @@
 
 
 
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    function syncFullAppLayout() {
+    function embedSubmitButtonInsideBar() {
         // -------------------------------------------------------------
         // 1. "პირადი პროფილი" ღილაკი "გამოსვლა"-ს გვერდით
         // -------------------------------------------------------------
@@ -253,7 +254,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         // -------------------------------------------------------------
-        // 3. შეკვეთის მთლიანი პანელის და ჯამის ზოლის გასწორება
+        // 3. შეკვეთის გაგზავნის ღილაკისა და ჯამის ჩასმა ბლოკის შიგნით
         // -------------------------------------------------------------
         if (dateInput) {
             var orderBar = dateInput.closest('form') || dateInput.closest('.checkout-bar') || dateInput.parentElement.parentElement;
@@ -265,8 +266,26 @@ document.addEventListener('DOMContentLoaded', function() {
                     productsGrid.parentNode.insertBefore(orderBar, productsGrid.nextSibling);
                 }
 
-                // მთლიანი პანელის სტილიზაცია
                 orderBar.style.cssText = 'display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; background: #071e11; border: 1px solid #1e472c; border-radius: 16px; padding: 18px 24px; margin-top: 30px; width: 100%; box-sizing: border-box;';
+
+                // გაგზავნის ღილაკისა და ჯამის მოძებნა და შიგნით ჩასმა
+                var submitBtn = Array.from(document.querySelectorAll('button')).find(function(b) {
+                    return b.textContent.includes('შეკვეთის გაგზავნა');
+                });
+
+                if (submitBtn) {
+                    var submitContainer = submitBtn.parentElement;
+                    if (submitContainer && submitContainer !== orderBar && !orderBar.contains(submitContainer)) {
+                        submitContainer.style.display = 'flex';
+                        submitContainer.style.alignItems = 'center';
+                        submitContainer.style.gap = '14px';
+                        submitContainer.style.marginLeft = 'auto';
+                        orderBar.appendChild(submitContainer);
+                    } else if (!orderBar.contains(submitBtn)) {
+                        submitBtn.style.marginLeft = 'auto';
+                        orderBar.appendChild(submitBtn);
+                    }
+                }
             }
         }
 
@@ -301,7 +320,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    setInterval(syncFullAppLayout, 500);
+    setInterval(embedSubmitButtonInsideBar, 500);
 });
 </script>
 </body>
