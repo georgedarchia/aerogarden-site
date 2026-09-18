@@ -511,19 +511,20 @@ function initAdminProductEditor() {
     });
 }
 setInterval(initAdminProductEditor, 1000);
-// --- Strict Admin-Only Product Price & Image Editor ---
+// --- Strict Admin Email Product Price & Image Editor ---
 function initAdminProductEditor() {
-    // მკაცრად ვამოწმებთ, რომ გვერდზე მითითებულია ზუსტად ადმინისტრატორის სტატუსი
     var bodyText = document.body.textContent || '';
-    var isAdmin = bodyText.includes('გამოსვლა (ადმინისტრატორი)') || bodyText.includes('ადმინისტრატო');
     
-    // თუ არ არის ადმინი, ვეძებთ და ვშლით ძველ ღილაკებს თუ სადმე დარჩა
+    // ვამოწმებთ, რომ შესულია ზუსტად admin@aerogarden.ge ელფოსტით ან ადმინისტრატორის პანელით
+    var isAdmin = bodyText.includes('admin@aerogarden.ge') || bodyText.includes('გამოსვლა (ადმინისტრატორი)') || bodyText.includes('ადმინისტრატო');
+    
+    // თუ არ არის ეს ადმინი, ვქაჩავთ და ვშლით ღილაკებს
     if (!isAdmin) {
         document.querySelectorAll('.admin-edit-btn').forEach(btn => btn.remove());
         return;
     }
 
-    // ვამატებთ რედაქტირების ღილაკებს მხოლოდ მაშინ, თუ ნამდვილად ადმინია
+    // ვამატებთ რედაქტირების ღილაკებს მხოლოდ ადმინისტრატორისთვის
     var cards = document.querySelectorAll('.product-card, .card');
     cards.forEach(function(card) {
         if (card.querySelector('.admin-edit-btn')) return;
@@ -566,5 +567,5 @@ function initAdminProductEditor() {
     });
 }
 
-// მუდმივად ვაკონტროლებთ სტატუსს
+// მუდმივად ვაკონტროლებთ ავტორიზაციის სტატუსს
 setInterval(initAdminProductEditor, 1000);
