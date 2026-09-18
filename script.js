@@ -511,3 +511,55 @@ function initAdminProductEditor() {
     });
 }
 setInterval(initAdminProductEditor, 1000);
+// --- Admin Inline Product Price & Image Editor ---
+function initAdminProductEditor() {
+    // ვამოწმებთ, არის თუ არა ადმინი საიტზე (ნავიგაციაში ან ტექსტში)
+    var adminNav = document.getElementById('admin-nav-link');
+    var isHeaderAdmin = document.body.textContent.includes('ადმინისტრატոր') || document.body.textContent.includes('ადმინი') || (adminNav && adminNav.style.display !== 'none');
+    
+    // თუ გვერდზე ხართ როგორც ადმინი, ვამატებთ ღილაკებს
+    var cards = document.querySelectorAll('.product-card, .card');
+    cards.forEach(function(card) {
+        if (card.classList.contains('admin-editable')) return;
+        card.classList.add('admin-editable');
+        card.style.position = 'relative';
+
+        var editBtn = document.createElement('button');
+        editBtn.className = 'admin-edit-btn';
+        editBtn.textContent = '✏️ რედაქტირება';
+        editBtn.style.cssText = 'position: absolute; top: 6px; left: 6px; z-index: 30; background: #1e472c; color: #a5d6a7; border: 1px solid #2e603a; border-radius: 4px; padding: 3px 8px; font-size: 11px; font-weight: bold; cursor: pointer;';
+        
+        editBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            var currentPriceEl = card.querySelector('.price, [class*="price"]') || card.querySelector('span:not([class])');
+            
+            var newPrice = prompt('შეიყვანეთ ახალი ფასი (₾):', '9');
+            if (newPrice !== null && newPrice.trim() !== '') {
+                if (currentPriceEl) {
+                    currentPriceEl.textContent = newPrice + ' ₾';
+                }
+                if (typeof showToast === 'function') {
+                    showToast('ფასი წარმატებით განახლდა! ✅');
+                } else {
+                    alert('ფასი წარმატებით განახლდა!');
+                }
+            }
+
+            var newImgUrl = prompt('შეიყვანეთ სურათის ახალი URL მისამართი:', '');
+            if (newImgUrl !== null && newImgUrl.trim() !== '') {
+                var imgEl = card.querySelector('img');
+                if (imgEl) {
+                    imgEl.src = newImgUrl;
+                    if (typeof showToast === 'function') {
+                        showToast('სურათი წარმატებით შეიცვალა! 🖼️');
+                    }
+                }
+            }
+        });
+
+        card.appendChild(editBtn);
+    });
+}
+
+// მუდმივად ვამოწმებთ პროდუქტების გამოჩენას
+setInterval(initAdminProductEditor, 800);
