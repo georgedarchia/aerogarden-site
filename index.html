@@ -165,11 +165,12 @@
 
 
 
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     function initSubscriptionAndCardFeatures() {
         // -------------------------------------------------------------
-        // 1. პერიოდული გამოწერის / ავტომატური გრაფიკის ბლოკი
+        // 1. პერიოდული გამოწერის განახლებული ბლოკი
         // -------------------------------------------------------------
         var dateInput = document.getElementById('order-date') || document.querySelector('input[type="date"]');
         if (dateInput && !document.getElementById('recurring-subscription-box')) {
@@ -188,32 +189,38 @@ document.addEventListener('DOMContentLoaded', function() {
                 '<select id="subscription-freq-select" style="background: #081a0e; border: 1px solid #2e603a; border-radius: 6px; color: #a5d6a7; padding: 6px 10px; font-size: 12px; font-weight: 600; outline: none; cursor: pointer;">' +
                     '<option value="one-time">🚀 ერთჯერადი შეკვეთა</option>' +
                     '<option value="tue-fri" selected>📅 კვირაში 2-ჯერ (სამშაბათი & პარასკევი)</option>' +
-                    '<option value="weekly-mon">📅 კვირაში 1-ხელ (ორშაბათობით)</option>' +
-                    '<option value="biweekly">📆 2 კვირაში 1-ხელ</option>' +
+                    '<option value="weekly-tue">📅 კვირაში 1-ხელ (სამშაბათი)</option>' +
                 '</select>' +
-                '<div id="days-selector-wrapper" style="display: flex; gap: 8px; font-size: 11px; color: #a5d6a7; margin-top: 2px;">' +
-                    '<label style="cursor:pointer; display:flex; align-items:center; gap:3px;"><input type="checkbox" id="day-tue" checked style="accent-color:#69bf4a;"> სამშ</label>' +
-                    '<label style="cursor:pointer; display:flex; align-items:center; gap:3px;"><input type="checkbox" id="day-fri" checked style="accent-color:#69bf4a;"> პარ</label>' +
-                    '<label style="cursor:pointer; display:flex; align-items:center; gap:3px;"><input type="checkbox" id="day-mon" style="accent-color:#69bf4a;"> ორშ</label>' +
+                '<div id="days-selector-wrapper" style="display: flex; gap: 10px; font-size: 11px; color: #a5d6a7; margin-top: 2px;">' +
+                    '<label style="cursor:pointer; display:flex; align-items:center; gap:3px;"><input type="checkbox" id="day-tue" checked style="accent-color:#69bf4a;"> სამშაბათი</label>' +
+                    '<label style="cursor:pointer; display:flex; align-items:center; gap:3px;"><input type="checkbox" id="day-fri" checked style="accent-color:#69bf4a;"> პარასკევი</label>' +
                 '</div>' +
                 '<span style="font-size: 10px; color: #78a883;">🌱 რესტორანს ავტომატურად მოემარაგება ახალი მიკრომწვანილი</span>';
 
             parentContainer.parentNode.insertBefore(subWrapper, parentContainer.nextSibling);
 
-            // დინამიური ცვლილება არჩევანზე
             var freqSelect = document.getElementById('subscription-freq-select');
             freqSelect.addEventListener('change', function() {
                 var daysWrapper = document.getElementById('days-selector-wrapper');
+                var dayTue = document.getElementById('day-tue');
+                var dayFri = document.getElementById('day-fri');
+
                 if (this.value === 'one-time') {
                     daysWrapper.style.display = 'none';
-                } else {
+                } else if (this.value === 'tue-fri') {
                     daysWrapper.style.display = 'flex';
+                    if (dayTue) dayTue.checked = true;
+                    if (dayFri) dayFri.checked = true;
+                } else if (this.value === 'weekly-tue') {
+                    daysWrapper.style.display = 'flex';
+                    if (dayTue) dayTue.checked = true;
+                    if (dayFri) dayFri.checked = false;
                 }
             });
         }
 
         // -------------------------------------------------------------
-        // 2. Tray vs Cut სელექტორი ბარათის ზედა მარჯვენა კუთხეში
+        // 2. Tray vs Cut სელექტორი ბარათზე
         // -------------------------------------------------------------
         var buttons = document.querySelectorAll('button');
         buttons.forEach(function(btn) {
