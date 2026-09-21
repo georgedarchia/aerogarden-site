@@ -590,4 +590,66 @@ function initAdminProductEditor() {
 }
 
 // მუდმივად ვაკონტროლებთ გვერდს
-setInterval(initAdminProductEditor, 1000);
+setInterval(initAdminProductEditor, 1000);// --- Admin Dynamic Gallery Image Adder ---
+function initAdminGalleryUploader() {
+    var bodyText = document.body.textContent || '';
+    var isAdmin = bodyText.includes('admin@aerogarden.ge') || bodyText.includes('გამოსვლა (ადმინისტრატორი)') || bodyText.includes('ადმინისტრატო');
+    
+    // ვძებნით გალერეის ბადეს ან კონტეინერს
+    var galleryContainer = document.querySelector('.gallery-grid, .gallery-container, .grid');
+    if (!galleryContainer) return;
+
+    // შენახული სურათების ჩატვირთვა LocalStorage-დან
+    var savedGallery = JSON.parse(localStorage.getItem('custom_gallery_images') || '[]');
+    
+    // ვამოწმებთ, რომ დინამიური სურათები უკვე არ არის ჩამატებული
+    savedGallery.forEach(function(imgUrl) {
+        if (!galleryContainer.querySelector('img[src="' + imgUrl + '"]')) {
+            var newItem = document.createElement('div');
+            newItem.className = 'gallery-item product-card';
+            newItem.style.position = 'relative';
+            newItem.innerHTML = '<img src="' + imgUrl + '" alt="გალერეის სურათი" style="width:100%; height:100%; object-fit:cover; border-radius:8px;">';
+            galleryContainer.appendChild(newItem);
+        }
+    });
+
+    if (!isAdmin) {
+        var addBtn = document.getElementById('admin-add-gallery-btn');
+        if (addBtn) addBtn.remove();
+        return;
+    }
+
+    // ვქმნით სურათის დამატების ღილაკს ადმინისთვის, თუ უკვე არ არსებობს
+    if (document.getElementById('admin-add-gallery-btn')) return;
+
+    var addImageBtn = document.button || document.createElement('button');
+    addImageBtn.id = 'admin-add-gallery-btn';
+    addImageBtn.textContent = '➕ სურათის დამატება გალერეაში';
+    addImageBtn.style.cssText = 'display: block; margin: 20px auto; background: #1e472c; color: #a5d6a7; border: 1px solid #2e603a; border-radius: 6px; padding: 10px 20px; font-size: 14px; font-weight: bold; cursor: pointer; z-index: 40;';
+    
+    addImageBtn.addEventListener('click', function() {
+        var imgUrl = prompt('შეიყვანეთ ახალი სურათის URL მისამართი:');
+        if (imgUrl !== null && imgUrl.trim() !== '') {
+            savedGallery.push(imgUrl.trim());
+            localStorage.setItem('custom_gallery_images', JSON.stringify(savedGallery));
+            
+            var newItem = document.createElement('div');
+            newItem.className = 'gallery-item product-card';
+            newItem.style.position = 'relative';
+            newItem.innerHTML = '<img src="' + imgUrl.trim() + '" alt="გალერეის სურათი" style="width:100%; height:100%; object-fit:cover; border-radius:8px;">';
+            galleryContainer.appendChild(newItem);
+
+            if (typeof showToast === 'function') {
+                showToast('სურათი წარმატებით დაემატა გალერეას! 🖼️');
+            } else {
+                alert('სურათი წარმატებით დაემატა!');
+            }
+        }
+    });
+
+    // ღილაკს ვათავსებთ გალერეის თავში ან ბოლოში
+    galleryContainer.parentNode.insertBefore(addImageBtn, galleryContainer);
+}
+
+// მუდმივად ვაკონტროლებთ გალერეის გვერდს
+setInterval(initAdminGalleryUploader, 1000);
