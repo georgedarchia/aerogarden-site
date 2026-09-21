@@ -590,42 +590,45 @@ function initAdminProductEditor() {
 }
 
 // მუდმივად ვაკონტროლებთ გვერდს
-setInterval(initAdminProductEditor, 1000);// --- Admin Dynamic Gallery Image Adder ---
+setInterval(initAdminProductEditor, 1000);// --- Robust Admin Gallery Uploader ---
 function initAdminGalleryUploader() {
     var bodyText = document.body.textContent || '';
     var isAdmin = bodyText.includes('admin@aerogarden.ge') || bodyText.includes('გამოსვლა (ადმინისტრატორი)') || bodyText.includes('ადმინისტრატო');
     
-    // ვძებნით გალერეის ბადეს ან კონტეინერს
-    var galleryContainer = document.querySelector('.gallery-grid, .gallery-container, .grid');
+    // ვძებნით გალერეის სათაურს ან ნებისმიერ სექციას, სადაც სურათებია
+    var galleryTitle = Array.from(document.querySelectorAll('h1, h2, h3, div')).find(el => el.textContent.includes('ფოტო გალერეა') || el.textContent.includes('გალერეა'));
+    var galleryContainer = document.querySelector('.gallery-grid, .gallery-container, .grid') || (galleryTitle ? galleryTitle.nextElementSibling : null);
+
     if (!galleryContainer) return;
 
     // შენახული სურათების ჩატვირთვა LocalStorage-დან
     var savedGallery = JSON.parse(localStorage.getItem('custom_gallery_images') || '[]');
     
-    // ვამოწმებთ, რომ დინამიური სურათები უკვე არ არის ჩამატებული
+    // ვამატებთ შენახულ სურათებს გალერეაში
     savedGallery.forEach(function(imgUrl) {
         if (!galleryContainer.querySelector('img[src="' + imgUrl + '"]')) {
             var newItem = document.createElement('div');
             newItem.className = 'gallery-item product-card';
-            newItem.style.position = 'relative';
-            newItem.innerHTML = '<img src="' + imgUrl + '" alt="გალერეის სურათი" style="width:100%; height:100%; object-fit:cover; border-radius:8px;">';
+            newItem.style.cssText = 'position: relative; background: #163320; border-radius: 8px; overflow: hidden; padding: 10px;';
+            newItem.innerHTML = '<img src="' + imgUrl + '" alt="გალერეის სურათი" style="width:100%; height:180px; object-fit:cover; border-radius:6px;">';
             galleryContainer.appendChild(newItem);
         }
     });
 
+    // თუ არ არის ადმინი, ვთიშავთ ღილაკს
     if (!isAdmin) {
-        var addBtn = document.getElementById('admin-add-gallery-btn');
-        if (addBtn) addBtn.remove();
+        var existingBtn = document.getElementById('admin-add-gallery-btn');
+        if (existingBtn) existingBtn.remove();
         return;
     }
 
-    // ვქმნით სურათის დამატების ღილაკს ადმინისთვის, თუ უკვე არ არსებობს
+    // ვქმნით სურათის დამატების ღილაკს, თუ უკვე არ არსებობს
     if (document.getElementById('admin-add-gallery-btn')) return;
 
-    var addImageBtn = document.button || document.createElement('button');
+    var addImageBtn = document.createElement('button');
     addImageBtn.id = 'admin-add-gallery-btn';
     addImageBtn.textContent = '➕ სურათის დამატება გალერეაში';
-    addImageBtn.style.cssText = 'display: block; margin: 20px auto; background: #1e472c; color: #a5d6a7; border: 1px solid #2e603a; border-radius: 6px; padding: 10px 20px; font-size: 14px; font-weight: bold; cursor: pointer; z-index: 40;';
+    addImageBtn.style.cssText = 'display: block; margin: 15px auto; background: #1e472c; color: #a5d6a7; border: 1px solid #2e603a; border-radius: 6px; padding: 8px 16px; font-size: 13px; font-weight: bold; cursor: pointer; z-index: 40;';
     
     addImageBtn.addEventListener('click', function() {
         var imgUrl = prompt('შეიყვანეთ ახალი სურათის URL მისამართი:');
@@ -635,8 +638,8 @@ function initAdminGalleryUploader() {
             
             var newItem = document.createElement('div');
             newItem.className = 'gallery-item product-card';
-            newItem.style.position = 'relative';
-            newItem.innerHTML = '<img src="' + imgUrl.trim() + '" alt="გალერეის სურათი" style="width:100%; height:100%; object-fit:cover; border-radius:8px;">';
+            newItem.style.cssText = 'position: relative; background: #163320; border-radius: 8px; overflow: hidden; padding: 10px;';
+            newItem.innerHTML = '<img src="' + imgUrl.trim() + '" alt="გალერეის სურათი" style="width:100%; height:180px; object-fit:cover; border-radius:6px;">';
             galleryContainer.appendChild(newItem);
 
             if (typeof showToast === 'function') {
@@ -647,9 +650,13 @@ function initAdminGalleryUploader() {
         }
     });
 
-    // ღილაკს ვათავსებთ გალერეის თავში ან ბოლოში
-    galleryContainer.parentNode.insertBefore(addImageBtn, galleryContainer);
+    // ღილაკს ვათავსებთ გალერეის სათაურთან ახლოს
+    if (galleryTitle) {
+        galleryTitle.parentNode.insertBefore(addImageBtn, galleryTitle.nextSibling);
+    } else {
+        galleryContainer.parentNode.insertBefore(addImageBtn, galleryContainer);
+    }
 }
 
-// მუდმივად ვაკონტროლებთ გალერეის გვერდს
+// მუდმივად ვაკონტროლებთ გალერეის გამოჩენას
 setInterval(initAdminGalleryUploader, 1000);
